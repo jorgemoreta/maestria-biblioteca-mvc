@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Préstamos Activos{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>📋 Préstamos Activos</h2>
+    <a href="/prestamos/nuevo" class="btn btn-primary">+ Nuevo Préstamo</a>
+</div>
+
+{% if prestamos %}
+<div class="card shadow-sm">
+    <table class="table table-hover mb-0">
+        <thead class="table-light">
+            <tr>
+                <th>ID</th>
+                <th>Libro</th>
+                <th>Usuario</th>
+                <th>Fecha Préstamo</th>
+                <th>Vencimiento</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in prestamos %}
+            <tr>
+                <td>#{{ p.IdPrestamo }}</td>
+                <td class="fw-bold">{{ p.libro.Título }}</td>
+                <td>{{ p.usuario.nombre_completo }}</td>
+                <td>{{ p.FechaPréstamo.strftime('%Y-%m-%d') }}</td>
+                <td>
+                    {% if p.FechaVencimiento < now %}
+                        <span class="text-danger fw-bold">{{ p.FechaVencimiento.strftime('%Y-%m-%d') }} (Vencido)</span>
+                    {% else %}
+                        <span class="text-success">{{ p.FechaVencimiento.strftime('%Y-%m-%d') }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form action="/prestamos/devolver/{{ p.IdPrestamo }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-outline-success" onclick="return confirm('¿Confirmar devolución del libro?')">
+                            🔄 Devolver
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    <div class="alert alert-info text-center mt-4">
+        <h4>No hay préstamos activos</h4>
+        <p>Todos los libros están en la biblioteca.</p>
+    </div>
+{% endif %}
+{% endblock %}

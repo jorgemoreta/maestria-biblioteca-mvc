@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Nuevo Préstamo{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Registrar Nuevo Préstamo</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/prestamos/nuevo">
+                    
+                    <div class="mb-3">
+                        <label for="usuario_id" class="form-label">Seleccionar Usuario:</label>
+                        <select name="usuario_id" id="usuario_id" class="form-select" required>
+                            <option value="" selected disabled>-- Elige un usuario --</option>
+                            {% for usuario in usuarios %}
+                                <option value="{{ usuario.IdUsuario }}">
+                                    {{ usuario.nombre_completo }} ({{ usuario.CorreoElectronico }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="isbn" class="form-label">Seleccionar Libro Disponible:</label>
+                        <select name="isbn" id="isbn" class="form-select" required>
+                            <option value="" selected disabled>-- Elige un libro --</option>
+                            {% for libro in libros %}
+                                <option value="{{ libro.ISBN }}">
+                                    {{ libro.Título }} - {{ libro.autor.nombre_completo }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text">Solo se muestran los libros que están disponibles actualmente.</div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">Confirmar Préstamo</button>
+                        <a href="/libros" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
